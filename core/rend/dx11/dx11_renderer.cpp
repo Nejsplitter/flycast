@@ -1034,7 +1034,7 @@ void DX11Renderer::RenderFramebuffer(const FramebufferInfo& info)
 #else
 	ID3D11RenderTargetView *nullView = nullptr;
 	deviceContext->OMSetRenderTargets(1, &nullView, nullptr);
-	theDX11Context.presentFrame(dcfbTextureView, width, height);
+	deviceContext->PSSetShaderResources(0, 1, &fbTextureView.get());
 #endif
 	frameRendered = true;
 	frameRenderedOnce = true;
