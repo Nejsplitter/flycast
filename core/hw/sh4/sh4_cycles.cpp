@@ -64,8 +64,7 @@ int Sh4Cycles::countCycles(u16 op)
 	};
 	if (isMemOp[opcode->ex_type])
 	{
-		if (++memOps < 4)
-			cycles = mmu_enabled() ? 5 : 2;
+		cycles = mmu_enabled() ? 5 : 2;
 	}
 	// TODO only for mem read?
 #endif
