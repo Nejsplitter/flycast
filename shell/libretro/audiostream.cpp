@@ -32,11 +32,11 @@
  *   expected samples at 60 (or 50) Hz
  * - Check that vsync swap interval remains
  *   'stable' for at least 'VSYNC_SWAP_INTERVAL_FRAMES' */
-#define VSYNC_SWAP_INTERVAL_FRAMES 6
+int VSYNC_SWAP_INTERVAL_FRAMES = 1;
 /* Calculated swap interval is 'valid' if it is
  * within 'VSYNC_SWAP_INTERVAL_THRESHOLD' of an integer
  * value */
-#define VSYNC_SWAP_INTERVAL_THRESHOLD 0.05f
+#define VSYNC_SWAP_INTERVAL_THRESHOLD 0.07f
 
 extern bool setAVInfo(retro_system_av_info& avinfo);
 
@@ -149,17 +149,17 @@ void retro_audio_upload(void)
 		/* If internal frame rate is equal to (within threshold)
 		 * or higher than the default 60 (or 50) Hz, fall back
 		 * to a swap interval of 1 */
-		if (swap_ratio < (1.0f + VSYNC_SWAP_INTERVAL_THRESHOLD))
+		if (swap_ratio > (2.0f - VSYNC_SWAP_INTERVAL_THRESHOLD) && swap_ratio < (2.0f + VSYNC_SWAP_INTERVAL_THRESHOLD))
 		{
-			swap_integer = 1;
+			VSYNC_SWAP_INTERVAL_FRAMES = 60;
+			swap_integer = 2;
 			swap_remainder = 0.0f;
 		}
 		else
 		{
-			swap_integer = (unsigned)(swap_ratio + 0.5f);
-			swap_remainder = swap_ratio - (float)swap_integer;
-			swap_remainder = (swap_remainder < 0.0f) ?
-					-swap_remainder : swap_remainder;
+			VSYNC_SWAP_INTERVAL_FRAMES = 1;
+			swap_integer = 1;
+			swap_remainder = 0.0f;
 		}
 
 		/* > Swap interval is considered 'valid' if it is
@@ -251,3 +251,4 @@ u32 RecordAudio(void *buffer, u32 samples)
 void StopAudioRecording()
 {
 }
+
