@@ -768,7 +768,7 @@ bool retro_refresh_av_info(double fps)
 		return false;
 
 	if (fps > 0 && fps < 100)
-		fps_spg = fps;
+		fps_spg = SPG_CONTROL.isPAL() ? 50.0 : 59.940060;
 
 	if (setAVInfo(avinfo))
 	{
